@@ -1,0 +1,19 @@
+.form-container {
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+.form-hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    position: absolute;
+    pointer-events: none;
+    visibility: hidden;
+}
+.form-visible {
+    opacity: 1;
+    transform: translateY(0);
+    position: static;
+    visibility: visible;
+}
+.auth-heading {
+    font-size: clamp(2rem, 5vw, 2.5rem); /* Scales from 2rem to 2.5rem */
+}
