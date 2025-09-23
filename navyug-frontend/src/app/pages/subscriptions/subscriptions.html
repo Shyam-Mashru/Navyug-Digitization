@@ -1,0 +1,60 @@
+<app-navbar></app-navbar>
+<div id="subscribe-page" class="page">
+    <div class="container mx-auto px-4 sm:px-6 py-8 md:py-10">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Manage Subscriptions</h1>
+        <p class="text-gray-600 mt-2 mb-8 md:mb-10">Choose your plan and unlock new features to fit your needs.</p>
+        <div class="flex justify-center mb-10">
+            <div id="billing-toggle-container" class="p-1 bg-slate-200 rounded-full">
+                <div id="billing-glider"></div>
+                <button id="monthly-btn" class="w-1/2 py-2 px-4 rounded-full font-semibold" [class.bg-blue-500]="this.billingType === 'monthly'" (click)="handleClick('monthly')">Monthly</button>
+                <button id="annually-btn" class="w-1/2 py-2 px-4 rounded-full font-semibold" [class.bg-blue-500]="this.billingType === 'anually'" (click)="handleClick('anually')">Annually (Save)</button>
+            </div>
+        </div>
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
+            <div id="subscription-items-container" class="w-full lg:w-2/3 space-y-4">
+                @for(modules of allModule; track modules.id) {
+                    <label [attr.for]="modules.id" class="bg-white rounded-lg shadow p-4 sm:p-5 flex items-center transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-blue-500 border-2" [class.opacity-60]="modules.tag === 'subscribed'" [class.cursor-not-allowed]="modules.tag === 'subscribed'">
+                        <input type="checkbox" class="sub-checkbox h-5 w-5 rounded border-gray-300 text-blue-500 focus:ring-blue-500" [disabled]="modules.tag === 'subscribed'" [checked]="modules.tag === 'subscribed'" (change)="onCheckboxChange($event, modules.id)"/>
+                        <div class="ml-4 flex-grow flex flex-wrap justify-between items-center gap-2">
+                            <div>
+                                <h4 class="font-bold text-lg text-gray-800">{{modules.name}}</h4>
+                                <p class="text-sm text-gray-500 mt-1">{{modules.description}}</p>
+                            </div>
+                            <div class="text-right ml-4 flex-shrink-0 w-28">
+                                @if(modules.tag === 'subscribed') {
+                                    <span class="text-green-600 font-semibold">Subscribed</span>
+                                }
+                                @if(modules.tag === 'unsubscribed') {
+                                    <span class="text-gray-800 font-bold text-lg">@if(this.billingType === 'monthly'){ ${{modules.montlyPrice}} }@if(this.billingType === 'anually'){ ${{modules.anualPrice}} }</span>
+                                    <span class="text-sm text-gray-500 block">@if(this.billingType === 'monthly'){ /month }@if(this.billingType === 'anually'){ /year }</span>
+                                }
+                            </div>
+                        </div>
+                    </label>
+                }
+            </div>
+            <div class="w-full lg:w-1/3">
+                <div id="order-summary" class="bg-white rounded-lg shadow-lg p-6 sticky top-24">
+                    <h3 class="text-xl font-bold text-gray-800 border-b pb-4 mb-4">Order Summary</h3>
+                    <ul class="space-y-3 mb-6">
+                        @for(modules of selectedModules; track modules.id) {
+                            <li class="flex justify-between items-center">
+                                <span class="text-gray-700">{{modules.name}}</span>
+                                <span class="text-gray-900 font-bold">@if(this.billingType === 'monthly'){ ${{modules.montlyPrice}}/mo }@if(this.billingType === 'anually'){ ${{modules.anualPrice}}/yr }</span>
+                            </li>
+                        }
+                    </ul>
+                    <div class="border-t pt-4 space-y-2">
+                            <div class="flex justify-between text-2xl font-bold text-gray-900">
+                            <span>Total</span>
+                            <span>${{this.totalPrice}}<span class="text-base font-normal text-gray-500">@if(this.billingType === 'monthly'){ /month }@if(this.billingType === 'anually'){ /year }</span></span>
+                        </div>
+                    </div>
+                    <button id="checkout-btn" class="w-full mt-6 gradient-btn text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:scale-105">
+                        Proceed to Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

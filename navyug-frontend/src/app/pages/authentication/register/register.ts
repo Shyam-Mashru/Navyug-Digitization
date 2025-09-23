@@ -19,6 +19,13 @@ export class Register {
       cpassword: ['',[Validators.required]],
     }, { validators: this.passwordMatchValidator });
   }
+ 
+  passwordMatchValidator: ValidatorFn = (group: AbstractControl) => {
+    const password = group.get('password')?.value;
+    const cpassword = group.get('cpassword')?.value;
+
+    return password === cpassword ? null : { passwordMismatch: true };
+  };
 
   onSubmit() {
     if(this.registerForm.valid)
@@ -28,11 +35,4 @@ export class Register {
       this.registerForm.reset();
     }
   }
-
-  passwordMatchValidator: ValidatorFn = (group: AbstractControl) => {
-  const password = group.get('password')?.value;
-  const cpassword = group.get('cpassword')?.value;
-
-  return password === cpassword ? null : { passwordMismatch: true };
-};
 }
